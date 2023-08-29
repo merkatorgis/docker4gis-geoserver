@@ -6,12 +6,16 @@ CONTAINER=$CONTAINER
 DOCKER_ENV=$DOCKER_ENV
 RESTART=$RESTART
 NETWORK=$NETWORK
-FILEPORT=$FILEPORT
-VOLUME=$VOLUME
+
+GEOSERVER_XMS=${GEOSERVER_XMS:-${XMS:-256m}}
+GEOSERVER_XMX=${GEOSERVER_XMX:-${XMX:-2g}}
+EXTRA_JAVA_OPTS="-Xms$GEOSERVER_XMS -Xmx$GEOSERVER_XMX"
+
+GEOSERVER_PORT=$(docker4gis/port.sh "${GEOSERVER_PORT:-58080}")
 
 docker container run --restart "$RESTART" --name "$CONTAINER" \
-	-e DOCKER_ENV="$DOCKER_ENV" \
-	-v "$(docker4gis/bind.sh "$FILEPORT" /fileport)" \
-	--mount source="$VOLUME",target=/volume \
+	--env DOCKER_ENV="$DOCKER_ENV" \
+	--env EXTRA_JAVA_OPTS="$EXTRA_JAVA_OPTS" \
+	-p "$GEOSERVER_PORT":8080 \
 	--network "$NETWORK" \
-	-d "$IMAGE" component_name "$@"
+	-d "$IMAGE" geoserver "$@"

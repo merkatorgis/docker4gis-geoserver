@@ -1,1 +1,1 @@
-FROM docker4gis/component_name:v0.0.0
+FROM docker4gis/geoserver:v0.0.0
