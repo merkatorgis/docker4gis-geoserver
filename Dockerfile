@@ -17,8 +17,7 @@ ENV SKIP_DEMO_DATA=true
 ENV ROOT_WEBAPP_REDIRECT=true
 ENV INSTALL_EXTENSIONS=true
 
-RUN mkdir -p /opt/geoserver_data/workspaces
-ONBUILD COPY conf/workspaces/. /opt/geoserver_data/workspaces
+ONBUILD COPY conf/geoserver_data/. /opt/geoserver_data
 
 ONBUILD COPY conf/additional_libs/. /opt/additional_libs
 ONBUILD COPY conf/additional_fonts/. /opt/additional_fonts

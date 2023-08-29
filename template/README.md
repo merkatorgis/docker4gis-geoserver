@@ -1,15 +1,16 @@
 # Extending docker4gis/geoserver
 
-## Workspaces
+## Configuration data
 
 After `dg build` and `dg run`, browse to http://localhost:58080 to launch the
 GeoServer Administration web page. Log in with `admin`/`geoserver`. This page is
 not available through the reverse proxy, locally (on https://localhost:7443) nor
 in Production.
 
-1. Create your Environments, Data Sources, Layers, Styles, etc. through the
+1. Create your Workspaces, Data Sources, Layers, Styles, etc. through the
    GeoServer Administration web page.
-1. When done, run `dg geoserver` to get the configuration data saved to `conf/workspaces`.
+1. When done, run `dg geoserver` to get the configuration data saved to
+   `conf/geoserver_data`.
 1. Then `dg build` again, to get the configuration saved in your image.
 
 ## Additional fonts
