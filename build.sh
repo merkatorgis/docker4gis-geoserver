@@ -7,5 +7,5 @@ docker image build \
 	-t "$IMAGE" . &&
 	docker container run --rm \
 		--mount src="$(realpath conf/additional_libs)",target=/save_additional_libs/,type=bind \
-		"$DOCKER_REGISTRY"/"$DOCKER_USER"/"$DOCKER_REPO" \
+		"$IMAGE" \
 		/opt/additional_libs/save_additional_libs.sh
