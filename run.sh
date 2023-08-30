@@ -15,6 +15,7 @@ GEOSERVER_PORT=$(docker4gis/port.sh "${GEOSERVER_PORT:-58080}")
 
 docker container run --restart "$RESTART" --name "$CONTAINER" \
 	--env DOCKER_ENV="$DOCKER_ENV" \
+	--env CONTAINER="$CONTAINER" \
 	--env EXTRA_JAVA_OPTS="$EXTRA_JAVA_OPTS" \
 	-p "$GEOSERVER_PORT":8080 \
 	--network "$NETWORK" \

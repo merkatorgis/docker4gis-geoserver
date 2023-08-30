@@ -38,6 +38,8 @@ ENV COMMUNITY_EXTENSIONS=
 
 RUN /opt/install-extensions.sh
 
+COPY conf/dg /usr/local/bin
+
 # Extension template, as required by `dg component`.
 COPY template /template/
 # Make this an extensible base component; see
