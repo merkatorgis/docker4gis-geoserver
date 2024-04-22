@@ -6,7 +6,6 @@ CONTAINER=$CONTAINER
 DOCKER_ENV=$DOCKER_ENV
 RESTART=$RESTART
 NETWORK=$NETWORK
-IP=$IP
 
 GEOSERVER_XMS=${GEOSERVER_XMS:-${XMS:-256m}}
 GEOSERVER_XMX=${GEOSERVER_XMX:-${XMX:-2g}}
@@ -20,5 +19,4 @@ docker container run --restart "$RESTART" --name "$CONTAINER" \
 	--env EXTRA_JAVA_OPTS="$EXTRA_JAVA_OPTS" \
 	-p "$GEOSERVER_PORT":8080 \
 	--network "$NETWORK" \
-	--ip "$IP" \
 	-d "$IMAGE" geoserver "$@"
