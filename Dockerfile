@@ -1,4 +1,4 @@
-FROM docker.osgeo.org/geoserver:2.23.2
+FROM docker.osgeo.org/geoserver:2.25.3
 
 # Allow configuration before things start up.
 COPY conf/entrypoint /

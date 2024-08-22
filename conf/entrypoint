@@ -8,6 +8,17 @@ if [ "$1" = 'geoserver' ]; then
 	# ENTRYPOINT/CMD (which you can find by `inspect`ing the image you're
 	# extending FROM).
 
+	# Set GEOSERVER_LOGGING_PROFILE if not configured manually.
+	logging_xml=$GEOSERVER_DATA_DIR/logging.xml
+	docker4gis_managed="<!-- To have the container set the logging level to the \$GEOSERVER_LOGGING_PROFILE value automatically, leave this first line untouched. -->"
+	[ -f "$logging_xml" ] || echo "$docker4gis_managed
+<logging>
+    <stdOutLogging>true</stdOutLogging>
+    <level>gets replaced</level>
+</logging>" >"$logging_xml"
+	[ "$(head -n 1 "$logging_xml")" = "$docker4gis_managed" ] &&
+		sed -i "s|<level>.*</level>|<level>$GEOSERVER_LOGGING_PROFILE</level>|g" "$logging_xml"
+
 	exec /opt/startup.sh "$@"
 fi
 
