@@ -1,1 +1,1 @@
-FROM docker4gis/geoserver:v0.0.12
+FROM docker4gis/geoserver:v0.0.13
