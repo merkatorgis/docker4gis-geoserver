@@ -13,6 +13,17 @@ in Production.
    `conf/geoserver_data`.
 1. Then `dg build` again, to get the configuration saved in your image.
 
+### Postgis JNDI store
+
+Use `java:comp/env/jdbc/postgres` as the jndiReferenceName. The following
+variables can be set in `.env` to override their default values:
+
+- `POSTGRES_HOST=$DOCKER_USER-postgis`
+- `POSTGRES_PORT=5432`
+- `POSTGRES_DB=postgres`
+- `POSTGRES_USERNAME=postgres`
+- `POSTGRES_PASSWORD=postgres`
+
 ## Additional fonts
 
 Place any font files in `conf/additional_fonts` to have them included.
