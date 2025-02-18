@@ -8,6 +8,11 @@ ENV SKIP_DEMO_DATA=true
 ENV ROOT_WEBAPP_REDIRECT=true
 ENV INSTALL_EXTENSIONS=true
 
+# Unset the base image's value, to gain the default 1/4 of the system's memory.
+# Optionally set XMS and XMX, which are read on container startup, so they're
+# settable through `export ${DOCKER_USER}_GEOSERVER_XM[SX]=...`.
+ENV EXTRA_JAVA_OPTS=
+
 ONBUILD COPY conf/geoserver_data/. /opt/geoserver_data
 
 ONBUILD COPY conf/additional_libs/. /opt/additional_libs

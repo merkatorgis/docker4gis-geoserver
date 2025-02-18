@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 if [ "$1" = 'geoserver' ]; then
@@ -7,6 +7,10 @@ if [ "$1" = 'geoserver' ]; then
 	# Here you can configure stuff, if needed, before starting the original
 	# ENTRYPOINT/CMD (which you can find by `inspect`ing the image you're
 	# extending FROM).
+
+	[ -n "$XMS" ] && EXTRA_JAVA_OPTS+=" -Xms$XMS"
+	[ -n "$XMX" ] && EXTRA_JAVA_OPTS+=" -Xmx$XMX"
+	export EXTRA_JAVA_OPTS
 
 	# Set GEOSERVER_LOGGING_PROFILE if not configured manually.
 	logging_xml=$GEOSERVER_DATA_DIR/logging.xml
