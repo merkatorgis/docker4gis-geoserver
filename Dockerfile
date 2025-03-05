@@ -36,6 +36,14 @@ RUN /opt/install-extensions.sh
 
 COPY conf/dg /usr/local/bin
 
+# Fix Couldn't create temporary file /tmp/apt.conf.SX9Tv7 for passing config to
+# apt-key.
+RUN chmod 1777 /tmp
+
+# Install xmlstarlet.
+RUN apt-get update
+RUN apt-get install -y xmlstarlet
+
 # Allow configuration before things start up.
 COPY conf/entrypoint /
 ENTRYPOINT ["/entrypoint"]
@@ -52,6 +60,8 @@ ONBUILD ARG DOCKER_USER
 ONBUILD ENV DOCKER_USER=$DOCKER_USER
 ONBUILD ARG DOCKER_REPO
 ONBUILD ENV DOCKER_REPO=$DOCKER_REPO
+
+ONBUILD ENV GEOSERVER_ADMIN_USER=${DOCKER_USER}_admin
 
 # Make this an extensible base component; see
 # https://github.com/merkatorgis/docker4gis/tree/npm-package/docs#extending-base-components.
