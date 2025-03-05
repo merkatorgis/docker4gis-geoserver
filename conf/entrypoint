@@ -10,6 +10,7 @@ if [ "$1" = 'geoserver' ]; then
 
 	[ -n "$XMS" ] && EXTRA_JAVA_OPTS+=" -Xms$XMS"
 	[ -n "$XMX" ] && EXTRA_JAVA_OPTS+=" -Xmx$XMX"
+	EXTRA_JAVA_OPTS+=" -DALLOW_ENV_PARAMETRIZATION=true"
 	export EXTRA_JAVA_OPTS
 
 	# Set GEOSERVER_LOGGING_PROFILE if not configured manually.
@@ -22,6 +23,30 @@ if [ "$1" = 'geoserver' ]; then
 </logging>" >"$logging_xml"
 	[ "$(head -n 1 "$logging_xml")" = "$docker4gis_managed" ] &&
 		sed -i "s|<level>.*</level>|<level>$GEOSERVER_LOGGING_PROFILE</level>|g" "$logging_xml"
+
+	# https://docs.geoserver.org/main/en/user/configuration/globalsettings.html#proxy-base-url
+	# shellcheck disable=SC2016
+	export PROXY_BASE_URL=${PROXY_BASE_URL:-'${X-Forwarded-Proto}://${X-Forwarded-Host}${X-Forwarded-Path}'}
+	export PROXY_BASE_URL_HEADER=${PROXY_BASE_URL_HEADER:-true}
+
+	# For some reason, the PROXY_BASE_URL_HEADER value isn't picked up. Manually
+	# set useHeadersProxyURL in global.xml. Update if it exists, otherwise add
+	# it.
+	xmlstarlet ed --inplace -u '/global/settings/useHeadersProxyURL' \
+		-v "$PROXY_BASE_URL_HEADER" "$GEOSERVER_DATA_DIR/global.xml" ||
+		xmlstarlet ed --inplace -s /global/settings -t elem \
+			-n useHeadersProxyURL -v "$PROXY_BASE_URL_HEADER" \
+			"$GEOSERVER_DATA_DIR/global.xml"
+
+	# Remove the master password file.
+	rm -f "$GEOSERVER_DATA_DIR"/security/masterpw.info
+
+	# In "$GEOSERVER_DATA_DIR/security/usergroup/default/config.xml" set the
+	# /userGroupService/passwordEncoderName element to
+	# "digestPasswordEncoder".
+	xmlstarlet ed --inplace -u '/userGroupService/passwordEncoderName' \
+		-v "digestPasswordEncoder" \
+		"$GEOSERVER_DATA_DIR/security/usergroup/default/config.xml"
 
 	exec /opt/startup.sh "$@"
 fi
