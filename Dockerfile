@@ -1,4 +1,4 @@
-FROM docker.osgeo.org/geoserver:2.26.2
+FROM docker.osgeo.org/geoserver:2.28.0
 
 # Example plugin use.
 # COPY conf/.plugins/bats /tmp/bats
